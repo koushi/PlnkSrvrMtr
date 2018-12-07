@@ -27,9 +27,9 @@ namespace PowerlinkServiceFixer
     public partial class MainWindow : Window
     {
 
-        public ServiceClass foo;
-        public ServiceClass bar;
-        public ServiceClass magic;
+        public ServiceClass PL;
+        public ServiceClass MSSQL;
+        public ServiceClass Vale;
         public bool serviceNeedsRestart = false;
         static NotifiableServiceController plService, sqlService, valeService;
         
@@ -39,36 +39,38 @@ namespace PowerlinkServiceFixer
             InitializeComponent();
 
             restartButton.Visibility = Visibility.Hidden;
-            initializeTestClass();
+            initializeData();
                         
-            //this.DataContext = foo;
-
-
-
+            
         }
 
-        private void initializeTestClass()
+        private void initializeData()
         {
+            
 
-            foo = new ServiceClass("PLWinService.exe");
-            bar = new ServiceClass("MSSQLSERVER");
-            magic = new ServiceClass("vswSQLEJobServer");
 
-            powerlink.DataContext = foo;
-            SQL.DataContext = bar;
-            vale.DataContext = magic;
+            plService = new NotifiableServiceController(new ServiceController("PLWinService.exe"));
+            plService.PropertyChanged += OnPropertyChanged;
+            PL = new ServiceClass(plService.DisplayName, "White");
+            PL.StatusToColor(plService.Status);
+            PL.PropertyChanged += OnPropertyChanged;
 
-            plService = new NotifiableServiceController(foo.SrvcController);
-            sqlService = new NotifiableServiceController(bar.SrvcController);
-            valeService = new NotifiableServiceController(magic.SrvcController);
+            sqlService = new NotifiableServiceController(new ServiceController("MSSQLSERVER"));
+            sqlService.PropertyChanged += OnPropertyChanged;
+            MSSQL = new ServiceClass(sqlService.DisplayName, "White");
+            MSSQL.StatusToColor(sqlService.Status);
+            PL.PropertyChanged += OnPropertyChanged;
 
-            //plService.PropertyChanged += OnServiceModified;
-            //sqlService.PropertyChanged += OnServiceModified;
-            //valeService.PropertyChanged += OnServiceModified;
+            valeService = new NotifiableServiceController(new ServiceController("vswSQLEJobServer"));
+            valeService.PropertyChanged += OnPropertyChanged;
+            Vale = new ServiceClass(valeService.DisplayName, "White");
+            Vale.StatusToColor(valeService.Status);
+            Vale.PropertyChanged += OnPropertyChanged;
 
-            foo.PropertyChanged += OnPropertyChanged;
-            bar.PropertyChanged += OnPropertyChanged;
-            magic.PropertyChanged += OnPropertyChanged;
+            powerlink.DataContext = PL;
+            SQL.DataContext = MSSQL;
+            vale.DataContext = Vale;
+            box.Text = "";
 
         }
 
@@ -76,94 +78,47 @@ namespace PowerlinkServiceFixer
         {
             try
             {
-                if(foo.VisibleFlag == true)
-                {
-                    plService.Start();
-                } else if(bar.VisibleFlag == true)
-                {
-                    sqlService.Start();
-                } else if(magic.VisibleFlag == true)
-                {
-                    valeService.Start();
-                }
+                
+
+                
             } catch(Exception ex)
             {
-                box.Text = ex.ToString();
-                Debug.Write(ex.ToString());
+                
             }
         }
 
 
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-
-            if (sender is ServiceClass)
+            if(sender is ServiceClass)
             {
-                ServiceClass controller = sender as ServiceClass;
-                if (e.PropertyName == "NotifiableController")
-                {
-                    
-                    if (controller.ServiceName == foo.ServiceName)
-                    {
-                        foo.StatusToColor(controller.SrvcController.Status);
-
-                    }
-                    else if (controller.ServiceName == bar.ServiceName)
-                    {
-                        bar.StatusToColor(controller.SrvcController.Status);
-
-                    }
-                    else if (controller.ServiceName == magic.ServiceName)
-                    {
-                        magic.StatusToColor(controller.SrvcController.Status);
-
-                    }
-                    MessageBox.Show("Mooo");
-                }
-                
-                if (e.PropertyName == "StatusColor")
+                if(e.PropertyName == "StatusColor")
                 {
                     toggleButton();
+                }
+            } else if (sender is NotifiableServiceController)
+            {
+                NotifiableServiceController temp = sender as NotifiableServiceController;
+                if(Vale.ServiceName == temp.DisplayName)
+                {
+                    Vale.StatusToColor(temp.Status);
+                } else if (PL.ServiceName == temp.DisplayName)
+                {
+                    PL.StatusToColor(temp.Status);
+                } else if (MSSQL.ServiceName == temp.DisplayName)
+                {
+                    MSSQL.StatusToColor(temp.Status);
                 }
             }
         }
 
         private void toggleButton()
         {
-            if((foo.VisibleFlag == false) && (bar.VisibleFlag == false) && (magic.VisibleFlag == false))
+            if(Vale.IsStopped)
             {
-                restartButton.Visibility = Visibility.Hidden;
-            }
-            else if((foo.VisibleFlag == true) || (bar.VisibleFlag == true) || (magic.VisibleFlag == true))
-            {
-                restartButton.Visibility = Visibility.Visible;
+                MessageBox.Show("Stopped");
             }
         }
-        
-        private void OnServiceModified(object sender, PropertyChangedEventArgs e)
-        {
-            
-            if (sender is NotifiableServiceController)
-            {
-                
-                NotifiableServiceController controller = sender as NotifiableServiceController;
-                if(controller.ServiceName == plService.ServiceName)
-                {
-                    foo.StatusToColor(controller.Status);
-                    
-                } else if (controller.ServiceName == sqlService.ServiceName)
-                {
-                    bar.StatusToColor(controller.Status);
-                    
-                } else if (controller.ServiceName == valeService.ServiceName)
-                {
-                    magic.StatusToColor(controller.Status);
-                    
-                }
-
-            }
-        }
-        
 
     }
 }

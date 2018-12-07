@@ -9,45 +9,30 @@ namespace PowerlinkServiceFixer
     {
         private string _serviceName = String.Empty;
         private string _statusColor = "WhiteSmoke";
-        private ServiceController _srvcController;
-        public bool _isVisible = false;
-        private NotifiableServiceController _srvcNot;
+        public bool _isStopped = false;
         
         public ServiceClass()
         {
-            this._srvcController = null;
+            this.ServiceName = "Blank";
+            this.StatusColor = "Black";
         }
 
-        public ServiceClass(string srvcName)
+        public ServiceClass(string srvcName, string color)
         {
-            this._srvcController = new ServiceController(srvcName);
-            this._serviceName = _srvcController.DisplayName;
-            this._srvcNot = new NotifiableServiceController(this._srvcController);
-            this._srvcNot.PropertyChanged += srvcChanged;
-            this.StatusToColor(this._srvcController.Status);
+            
+            this.ServiceName = srvcName;
+            this.StatusColor = color;
         }
 
-        public bool VisibleFlag
+        public bool IsStopped
         {
-            get { return this._isVisible; }
+            get { return this._isStopped; }
             set
             {
-                this._isVisible = value;
+                this._isStopped = value;
             }
         }
-
-        public ServiceController SrvcController
-        {
-            get { return this._srvcController; }
-            set
-            {
-                this._srvcController = value;
-                //this.NotifyPropertyChanged("SrvcController");
                 
-                this._serviceName = value.DisplayName;
-            }
-        }
-
         public string ServiceName {
             get { return this._serviceName; }
             set
@@ -73,12 +58,6 @@ namespace PowerlinkServiceFixer
                 }
             }
         }
-                
-
-        public void UpdateNameFromSrvc()
-        {
-            this._serviceName = this._srvcController.DisplayName;
-        }
 
         public void StatusToColor(ServiceControllerStatus sc)
         {
@@ -87,11 +66,11 @@ namespace PowerlinkServiceFixer
             {
                 case ServiceControllerStatus.Stopped:
                     this.StatusColor = "Red";
-                    this.VisibleFlag = true;
+                    this.IsStopped = true;
                     break;
                 case ServiceControllerStatus.Running:
                     this.StatusColor = "Green";
-                    this.VisibleFlag = false;
+                    this.IsStopped = false;
                     break;
                 case ServiceControllerStatus.StartPending:
                     this.StatusColor = "Yellow";
@@ -114,9 +93,5 @@ namespace PowerlinkServiceFixer
             }
         }
 
-        private void srvcChanged(object sender, PropertyChangedEventArgs e)
-        {
-            this.NotifyPropertyChanged("NotifiableController");
-        }
     }
 }
