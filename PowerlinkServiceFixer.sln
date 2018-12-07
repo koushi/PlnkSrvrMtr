@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerlinkServiceFixer", "PowerlinkServiceFixer\PowerlinkServiceFixer.csproj", "{A4AA9666-CE2E-4628-B706-FF865FCFA09C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A4AA9666-CE2E-4628-B706-FF865FCFA09C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4AA9666-CE2E-4628-B706-FF865FCFA09C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4AA9666-CE2E-4628-B706-FF865FCFA09C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4AA9666-CE2E-4628-B706-FF865FCFA09C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {392685C0-0614-4298-8978-36916BD28CC3}
+	EndGlobalSection
+EndGlobal
