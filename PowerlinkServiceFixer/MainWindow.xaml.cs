@@ -24,7 +24,7 @@ namespace PowerlinkServiceFixer
     /// 
 
 
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window , INotifyPropertyChanged
     {
 
         public ServiceClass PL;
@@ -32,8 +32,8 @@ namespace PowerlinkServiceFixer
         public ServiceClass Vale;
         public bool serviceNeedsRestart = false;
         static NotifiableServiceController plService, sqlService, valeService;
-        
-
+               
+                
         public MainWindow()
         {
             InitializeComponent();
@@ -41,7 +41,6 @@ namespace PowerlinkServiceFixer
             restartButton.Visibility = Visibility.Hidden;
             initializeData();
                         
-            
         }
 
         private void initializeData()
@@ -70,7 +69,8 @@ namespace PowerlinkServiceFixer
             powerlink.DataContext = PL;
             SQL.DataContext = MSSQL;
             vale.DataContext = Vale;
-            box.Text = "";
+
+            
 
         }
 
@@ -92,7 +92,8 @@ namespace PowerlinkServiceFixer
         {
             if(sender is ServiceClass)
             {
-                if(e.PropertyName == "StatusColor")
+                ServiceClass test = sender as ServiceClass;
+                if(e.PropertyName == "IsStopped")
                 {
                     toggleButton();
                 }
@@ -114,11 +115,10 @@ namespace PowerlinkServiceFixer
 
         private void toggleButton()
         {
-            if(Vale.IsStopped)
-            {
-                MessageBox.Show("Stopped");
-            }
+
         }
+
+        
 
     }
 }

@@ -15,7 +15,7 @@
             
 
         </StackPanel>
-        <TextBlock  x:Name="box" HorizontalAlignment="Left" Height="61.64" Margin="18.323,230.36,0,10" TextWrapping="Wrap" Text="TextBlock" Width="335.194"/>
+        <TextBlock  x:Name="box" HorizontalAlignment="Left" Height="61.64" Margin="18.323,230.36,0,10" TextWrapping="Wrap" Text="{Binding BoxText}" Width="335.194"/>
         <Button x:Name="restartButton" Content="Restart Services" Margin="63
  ,183.002,62,93.997" Click="restartButton_Click" Width="250" Height="25"/>
     </Grid>

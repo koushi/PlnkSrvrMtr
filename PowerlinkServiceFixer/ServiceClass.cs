@@ -30,6 +30,7 @@ namespace PowerlinkServiceFixer
             set
             {
                 this._isStopped = value;
+                this.NotifyPropertyChanged("IsStopped");
             }
         }
                 
